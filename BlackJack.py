@@ -29,3 +29,5 @@ def deal_card():
     card, value = random.choice(list(card_deck.items()))
     del card_deck[card]
     return card, value
+
+#play_game()  // This command will come in the end to call the actual game itself to be played
