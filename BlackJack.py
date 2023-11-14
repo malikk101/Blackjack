@@ -30,4 +30,78 @@ def deal_card():
     del card_deck[card]
     return card, value
 
-#play_game()  // This command will come in the end to call the actual game itself to be played
+def play_game():
+    player1_score = 0
+    player2_score = 0
+    while card_deck:
+        # Deal cards to both players
+        player1_card1, player1_value1 = deal_card()
+        player2_card1, player2_value1 = deal_card()
+        player1_card2, player1_value2 = deal_card()
+        player2_card2, player2_value2 = deal_card()
+
+        # Calculate initial scores
+        player1_score = player1_value1 + player1_value2
+        player2_score = player2_value1 + player2_value2
+
+        # Check for initial blackjack
+        if player1_score == 21:
+            print("Player 1 wins with a score of 21")
+            break
+        elif player2_score == 21:
+            print("Player 2 wins with a score of 21")
+            break
+
+        # Player 1's turn
+        while player1_score < 21:
+            print("Player 1 Score is", player1_score)
+            print("Player 2 Score is", player2_score)
+            hit_or_stay = input("Player 1, do you want to hit or stay? (h/s)")
+            if hit_or_stay.lower() == 'h':
+                player1_new_card, player1_new_value = deal_card()
+                player1_score += player1_new_value
+                if player1_score > 21:
+                    if 'Ace' in player1_card1 or 'Ace' in player1_card2 or 'Ace' in player1_new_card:
+                        player1_score -= 10
+                    else:
+                        print("Player 1 busted with a score of", player1_score)
+                        print("Player 2 wins!")
+                        return
+            else:
+                break
+
+        # Player 2's turn
+        while player2_score < 21 and player1_score <= 21:
+            print("Player 1 Score is", player1_score)
+            print("Player 2 Score is", player2_score)
+            hit_or_stay = input("Player 2, do you want to hit or stay? (h/s)")
+            if hit_or_stay.lower() == 'h':
+                player2_new_card, player2_new_value = deal_card()
+                player2_score += player2_new_value
+                if player2_score > 21:
+                    if 'Ace' in player2_card1 or 'Ace' in player2_card2 or 'Ace' in player2_new_card:
+                        player2_score -= 10
+                    else:
+                        print("Player 2 busted with a score of", player2_score)
+                        print("Player 1 wins!")
+                        return
+            else:
+                break
+
+        # Determine the winner
+        if player1_score > 21 and player2_score > 21:
+            print("Both players busted!")
+        elif player1_score > 21:
+            print("Player 2 wins with a score of", player2_score)
+        elif player2_score > 21:
+            print("Player 1 wins with a score of", player1_score)
+        elif player1_score == player2_score:
+            print("Tied!")
+        elif player1_score > player2_score:
+            print("Player 1 wins with a score of", player1_score)
+        else:
+            print("Player 2 wins with a score of", player2_score)
+
+    print("The cards ran out. Game over.")
+
+play_game()
